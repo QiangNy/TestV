@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="mystyle" parent="android:Theme.DeviceDefault.Light" />
+    <style name="mystylebar" parent="android:Theme.Holo.NoActionBar.Fullscreen" />
+    <style name="lightstyle" parent="android:Theme.Holo.Light"/>
+</resources>
