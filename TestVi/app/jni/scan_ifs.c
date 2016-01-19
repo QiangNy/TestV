@@ -14,7 +14,7 @@
 
 #include "jniglue.h"
 
-jobjectArray Java_com_example_vpnspl_core_NativeUtils_getIfconfig(JNIEnv* env)
+jobjectArray Java_ludeng_com_testvi_vpnspl_core_NativeUtils_getIfconfig(JNIEnv* env)
 {
 
 

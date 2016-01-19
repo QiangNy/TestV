@@ -49,7 +49,7 @@ public class ProfileManager {
     private static void checkInstance(Context context) {
         if (instance == null) {
             instance = new ProfileManager();
-            instance.loadVPNList(context);
+          //  instance.loadVPNList(context);
         }
     }
 
@@ -92,7 +92,7 @@ public class ProfileManager {
     }
 
 
-    public Collection<VpnProfile> getProfiles() {
+/*    public Collection<VpnProfile> getProfiles() {
         return profiles.values();
     }
 
@@ -103,9 +103,9 @@ public class ProfileManager {
             }
         }
         return null;
-    }
+    }*/
 
-    public void saveProfileList(Context context) {
+/*    public void saveProfileList(Context context) {
         SharedPreferences sharedprefs = context.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
         Editor editor = sharedprefs.edit();
         editor.putStringSet("vpnlist", profiles.keySet());
@@ -117,24 +117,24 @@ public class ProfileManager {
         editor.putInt("counter", counter + 1);
         editor.apply();
 
-    }
+    }*/
 
     public void addProfile(VpnProfile profile) {
         profiles.put(profile.getUUID().toString(), profile);
 
     }
 
-    public static void setTemporaryProfile(VpnProfile tmp) {
+/*    public static void setTemporaryProfile(VpnProfile tmp) {
         ProfileManager.tmpprofile = tmp;
     }
 
     public static boolean isTempProfile()
     {
         return mLastConnectedVpn == tmpprofile;
-    }
+    }*/
 
 
-    public void saveProfile(Context context, VpnProfile profile) {
+/*    public void saveProfile(Context context, VpnProfile profile) {
         ObjectOutputStream vpnfile;
         try {
             vpnfile = new ObjectOutputStream(context.openFileOutput((profile.getUUID().toString() + ".vp"), Activity.MODE_PRIVATE));
@@ -146,10 +146,10 @@ public class ProfileManager {
             VpnStatus.logException("saving VPN profile", e);
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
 
-    private void loadVPNList(Context context) {
+/*    private void loadVPNList(Context context) {
         profiles = new HashMap<>();
         SharedPreferences listpref = context.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
         Set<String> vlist = listpref.getStringSet("vpnlist", null);
@@ -173,10 +173,10 @@ public class ProfileManager {
                 VpnStatus.logException("Loading VPN List", e);
             }
         }
-    }
+    }*/
 
 
-    public void removeProfile(Context context, VpnProfile profile) {
+/*    public void removeProfile(Context context, VpnProfile profile) {
         String vpnentry = profile.getUUID().toString();
         profiles.remove(vpnentry);
         saveProfileList(context);
@@ -184,7 +184,7 @@ public class ProfileManager {
         if (mLastConnectedVpn == profile)
             mLastConnectedVpn = null;
 
-    }
+    }*/
 
     public static VpnProfile get(Context context, String profileUUID) {
         checkInstance(context);

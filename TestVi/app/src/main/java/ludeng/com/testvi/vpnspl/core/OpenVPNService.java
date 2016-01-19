@@ -407,6 +407,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         // Extract information from the intent.
         String prefix = getPackageName();
         String[] argv = intent.getStringArrayExtra(prefix + ".ARGV");
+
  for(String str:argv){
             Log.i("ICABVIEW","argv is "+str.toString());
         }
