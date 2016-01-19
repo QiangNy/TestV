@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public class VpnUtils {
 
-    public static String getFileData(Context c, String filename, int num)throws IOException, SecurityException {
+    public static String getFileData(Context c, int num)throws IOException, SecurityException {
 
         StringBuffer str = new StringBuffer();
         str.append(NativeUtils.getICon(num).toString());
@@ -27,7 +27,7 @@ public class VpnUtils {
         }
 
 
-        return VpnProfile.DISPLAYNAME_TAG+filename+VpnProfile.INLINE_TAG + str;
+        return VpnProfile.DISPLAYNAME_TAG+num+VpnProfile.INLINE_TAG + str;
     }
 
 

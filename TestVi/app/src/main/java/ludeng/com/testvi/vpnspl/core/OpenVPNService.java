@@ -29,14 +29,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.opentest.BuildConfig;
-import ludeng.com.testvi.opentest.DisconnectVPN;
-import ludeng.com.testvi.opentest.FirstActivity;
 import com.example.opentest.R;
-import ludeng.com.testvi.vpnspl.VpnProfile;
-import ludeng.com.testvi.vpnspl.core.NetworkSpace.ipAddress;
-import ludeng.com.testvi.vpnspl.core.VpnStatus.ByteCountListener;
-import ludeng.com.testvi.vpnspl.core.VpnStatus.ConnectionStatus;
-import ludeng.com.testvi.vpnspl.core.VpnStatus.StateListener;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -47,6 +40,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Vector;
+
+import ludeng.com.testvi.opentest.DisconnectVPN;
+import ludeng.com.testvi.opentest.FirstActivity;
+import ludeng.com.testvi.vpnspl.VpnProfile;
+import ludeng.com.testvi.vpnspl.core.NetworkSpace.ipAddress;
+import ludeng.com.testvi.vpnspl.core.VpnStatus.ByteCountListener;
+import ludeng.com.testvi.vpnspl.core.VpnStatus.ConnectionStatus;
+import ludeng.com.testvi.vpnspl.core.VpnStatus.StateListener;
 
 import static ludeng.com.testvi.vpnspl.core.VpnStatus.ConnectionStatus.LEVEL_CONNECTED;
 import static ludeng.com.testvi.vpnspl.core.VpnStatus.ConnectionStatus.LEVEL_CONNECTING_NO_SERVER_REPLY_YET;
@@ -99,7 +100,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.i("ICABVIEW","onBind");
+
         String action = intent.getAction();
         if (action != null && action.equals(START_SERVICE))
             return mBinder;
@@ -110,7 +111,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     @Override
     public void onRevoke()
     {
-        Log.i("ICABVIEW","onRevoke");
+
         VpnStatus.logInfo(R.string.permission_revoked);
         mManagement.stopVPN();
         endVpnService();
@@ -331,7 +332,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
                 return START_NOT_STICKY;
             }
             /* Do the asynchronous keychain certificate stuff */
-            mProfile.checkForRestart(this);
+            //mProfile.checkForRestart(this);
 
             /* Recreate the intent */
             intent = mProfile.getStartServiceIntent(this);
@@ -340,69 +341,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             String profileUUID = intent.getStringExtra(getPackageName() + ".profileUUID");
             mProfile = ProfileManager.get(this, profileUUID);
         }
-        Log.i("ICABVIEW",""
-/*                +"mProfileDeleted is "+(mProfile.profileDeleted==false)		+"\n"
-                +"mAuthenticationType is "+mProfile.mAuthenticationType		+"\n"
-                +"mName is "+mProfile.mName									+"\n"
-                +"mAlias " +mProfile.mAlias 								+"\n"*/
-/*                 		+"mClientCertFilename  "+mProfile.mClientCertFilename		+"\n"
-                +"mTLSAuthDirection  "	+mProfile.mTLSAuthDirection			+"\n"
-                +"mTLSAuthFilename  "	+mProfile.mTLSAuthFilename 			+"\n"
-                //		+"mClientKeyFilename    "+mProfile.mClientKeyFilename		+"\n"
-                //		+"mCaFilename  "		+mProfile.mCaFilename				+"\n"
-               +"mUseLzo   "		    +(mProfile.mUseLzo ==true)			+"\n"
-                +"mPKCS12Filename  "	+mProfile.mPKCS12Filename			+"\n"
-                +"mPKCS12Password    "  +(mProfile.mPKCS12Password)           +"\n"
-                +"mUseTLSAuth   "		+(mProfile.mUseTLSAuth ==false)		+"\n"
-                +"mDNS1    "			+mProfile.mDNS1						+"\n"
-                +"mDNS2    "			+mProfile.mDNS2						+"\n"
-                +"mIPv4Address   "		+mProfile.mIPv4Address				+"\n"
-                +"mIPv6Address   "		+mProfile.mIPv6Address				+"\n"
-                +"mOverrideDNS   "		+(mProfile.mOverrideDNS ==false)   	+"\n"
-                +"mSearchDomain   "		+mProfile.mSearchDomain				+"\n"
-                +"mUseDefaultRoute   "	+(mProfile.mUseDefaultRoute ==true)   +"\n"
-                +"mUsePull   "			+(mProfile.mUsePull==true)			+"\n"
-                +"mCustomRoutes	"		+mProfile.mCustomRoutes				+"\n"
-                +"mCheckRemoteCN	"	+(mProfile.mCheckRemoteCN==true)		+"\n"
-                +"mExpectTLSCert	"	+(mProfile.mExpectTLSCert==false)		+"\n"
-                +"mRemoteCN		"		+mProfile.mRemoteCN					+"\n"
-                +"mPassword		"		+mProfile.mPassword					+"\n"
-                +"mUsername		"		+mProfile.mUsername					+"\n"
-                +"mRoutenopull		"	+(mProfile.mRoutenopull==false)		+"\n"
-                +"mUseRandomHostname	"+(mProfile.mUseRandomHostname==false)+"\n"
-                +"mUseFloat"			+(mProfile.mUseFloat==false)			+"\n"
-                +"mUseCustomConfig	"	+(mProfile.mUseCustomConfig==false)	+"\n"
-                +"mCustomConfigOptions	"+mProfile.mCustomConfigOptions		+"\n"
-                +"mVerb	"				+mProfile.mVerb						+"\n"
-                +"mCipher	"			+mProfile.mCipher					+"\n"
-                +"mNobind	"			+(mProfile.mNobind==false)			+"\n"
-                +"mUseDefaultRoutev6	"+(mProfile.mUseDefaultRoutev6==true)	+"\n"
-                +"mCustomRoutesv6	"	+mProfile.mCustomRoutesv6			+"\n"
-                +"mKeyPassword	"		+mProfile.mKeyPassword				+"\n"
-                +"mPersistTun	"		+(mProfile.mPersistTun==false)		+"\n"
-                +"mConnectRetryMax	"	+mProfile.mConnectRetryMax			+"\n"
-                +"mConnectRetry	"		+mProfile.mConnectRetry				+"\n"
-                +"mUserEditable	"		+(mProfile.mUserEditable==true)		+"\n"
-                +"mAuth	"				+mProfile.mAuth						+"\n"
-                +"mX509AuthType	"		+mProfile.mX509AuthType 			+"\n"
-                +"mPrivateKey	"		+(mProfile.mPrivateKey)			+"\n"
-                +"mUuid	"				+mProfile.mUuid						+"\n"
-                +"mAllowLocalLAN	"	+(mProfile.mAllowLocalLAN==false)	+"\n"
-                +"mProfileVersion	"	+mProfile.mProfileVersion          		+"\n"
-                +"mExcludedRoutes	"	+mProfile.mExcludedRoutes			+"\n"
-                +"mExcludedRoutesv6	"	+mProfile.mExcludedRoutesv6			+"\n"
-                +"mMssFix	"			+mProfile.mMssFix					+"\n"
-                +"mConnections	"		+mProfile.mConnections.length	+"\n"
-                +"mConnections	"		+mProfile.mConnections[0].mServerName	+"\n"
-                +"mRemoteRandom	"		+(mProfile.mRemoteRandom==false)		+"\n"
-                +"mAllowedAppsVpnAreDisallowed	"+(mProfile.mAllowedAppsVpnAreDisallowed==true) 	+"\n"
-                +"mProfileCreator	"	+mProfile.mProfileCreator 			+"\n"
-                +"mServerName	"		+mProfile.mServerName				+"\n"
-                +"mServerPort	"		+mProfile.mServerPort				+"\n"
-                +"mUseUdp	"			+(mProfile.mUseUdp==true)				+"\n"
-                +"mPushPeerInfo	"		+(mProfile.mPushPeerInfo==false)		+"\n"*/
 
-        );
 
         // Extract information from the intent.
         String prefix = getPackageName();
@@ -493,8 +432,8 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         ProfileManager.setConnectedVpnProfile(this, mProfile);
         /* TODO: At the moment we have no way to handle asynchronous PW input
          * Fixing will also allow to handle challenge/response authentication */
-        if (mProfile.needUserPWInput(true) != 0)
-            return START_NOT_STICKY;
+/*        if (mProfile.needUserPWInput(true) != 0)
+            return START_NOT_STICKY;*/
 
         return START_STICKY;
     }

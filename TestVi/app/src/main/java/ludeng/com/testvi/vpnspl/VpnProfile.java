@@ -14,20 +14,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.security.KeyChain;
-import android.security.KeyChainException;
 import android.text.TextUtils;
 import android.util.Base64;
 
 import com.example.opentest.R;
-import ludeng.com.testvi.vpnspl.core.Connection;
-import ludeng.com.testvi.vpnspl.core.NativeUtils;
-import ludeng.com.testvi.vpnspl.core.OpenVPNService;
-import ludeng.com.testvi.vpnspl.core.VPNLaunchHelper;
-import ludeng.com.testvi.vpnspl.core.VpnStatus;
-import ludeng.com.testvi.vpnspl.core.X509Utils;
-import ludeng.com.testvi.vpnspl.perm.PemObject;
-import ludeng.com.testvi.vpnspl.perm.PemWriter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,15 +25,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
@@ -54,6 +40,11 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+
+import ludeng.com.testvi.vpnspl.core.Connection;
+import ludeng.com.testvi.vpnspl.core.NativeUtils;
+import ludeng.com.testvi.vpnspl.core.VPNLaunchHelper;
+import ludeng.com.testvi.vpnspl.core.VpnStatus;
 
 public class VpnProfile implements Serializable, Cloneable {
     // Note that this class cannot be moved to core where it belongs since
@@ -353,7 +344,7 @@ public class VpnProfile implements Serializable, Cloneable {
 
             case VpnProfile.TYPE_USERPASS_KEYSTORE:
                 cfg += "auth-user-pass\n";
-            case VpnProfile.TYPE_KEYSTORE:
+/*            case VpnProfile.TYPE_KEYSTORE:
                 if (!configForOvpn3) {
                     String[] ks = getKeyStoreCertificates(context);
                     cfg += "### From Keystore ####\n";
@@ -370,7 +361,7 @@ public class VpnProfile implements Serializable, Cloneable {
                                 cfg += context.getString(R.string.jelly_keystore_alphanumeric_bug) + "\n";
                     }
                 }
-                break;
+                break;*/
             case VpnProfile.TYPE_USERPASS:
                 cfg += "auth-user-pass\n";
                 cfg += insertFileData("ca", mCaFilename);
@@ -630,14 +621,10 @@ public class VpnProfile implements Serializable, Cloneable {
 
     public Intent prepareStartService(Context context) {
         Intent intent = getStartServiceIntent(context);
-
-
-        if (mAuthenticationType == VpnProfile.TYPE_KEYSTORE || mAuthenticationType == VpnProfile.TYPE_USERPASS_KEYSTORE) {
+/*        if (mAuthenticationType == VpnProfile.TYPE_KEYSTORE || mAuthenticationType == VpnProfile.TYPE_USERPASS_KEYSTORE) {
             if (getKeyStoreCertificates(context) == null)
                 return null;
-        }
-
-
+        }*/
         try {
             FileWriter cfg = new FileWriter(VPNLaunchHelper.getConfigFilePath(context));
             cfg.write(getConfigFile(context, false));
@@ -663,9 +650,9 @@ public class VpnProfile implements Serializable, Cloneable {
         return intent;
     }
 
-    public String[] getKeyStoreCertificates(Context context) {
+/*    public String[] getKeyStoreCertificates(Context context) {
         return getKeyStoreCertificates(context, 5);
-    }
+    }*/
 
     public static String getDisplayName(String embeddedFile) {
         int start = DISPLAYNAME_TAG.length();
@@ -691,8 +678,8 @@ public class VpnProfile implements Serializable, Cloneable {
             return false;
     }
 
-    public void checkForRestart(final Context context) {
-        /* This method is called when OpenVPNService is restarted */
+/*    public void checkForRestart(final Context context) {
+        *//* This method is called when OpenVPNService is restarted *//*
 
         if ((mAuthenticationType == VpnProfile.TYPE_KEYSTORE || mAuthenticationType == VpnProfile.TYPE_USERPASS_KEYSTORE)
                 && mPrivateKey==null) {
@@ -704,7 +691,7 @@ public class VpnProfile implements Serializable, Cloneable {
                 }
             }).start();
         }
-    }
+    }*/
 
     @Override
     protected VpnProfile clone() throws CloneNotSupportedException {
@@ -738,7 +725,7 @@ public class VpnProfile implements Serializable, Cloneable {
         }
     }
 
-    synchronized String[] getKeyStoreCertificates(Context context,int tries) {
+ /*   synchronized String[] getKeyStoreCertificates(Context context,int tries) {
         PrivateKey privateKey = null;
         X509Certificate[] caChain;
         Exception exp;
@@ -845,7 +832,7 @@ public class VpnProfile implements Serializable, Cloneable {
             }
         }
         return null;
-    }
+    }*/
 
     //! Return an error if somethign is wrong
     public int checkProfile(Context context) {
@@ -945,27 +932,7 @@ public class VpnProfile implements Serializable, Cloneable {
             return false;
     }
 
-    public int needUserPWInput(boolean ignoreTransient) {
-        if ((mAuthenticationType == TYPE_PKCS12 || mAuthenticationType == TYPE_USERPASS_PKCS12) &&
-                (mPKCS12Password == null || mPKCS12Password.equals(""))) {
-            if (ignoreTransient || mTransientPCKS12PW == null)
-                return R.string.pkcs12_file_encryption_key;
-        }
 
-        if (mAuthenticationType == TYPE_CERTIFICATES || mAuthenticationType == TYPE_USERPASS_CERTIFICATES) {
-            if (requireTLSKeyPassword() && TextUtils.isEmpty(mKeyPassword))
-                if (ignoreTransient || mTransientPCKS12PW == null) {
-                    return R.string.private_key_password;
-                }
-        }
-
-        if (isUserPWAuth() &&
-                (TextUtils.isEmpty(mUsername) ||
-                (TextUtils.isEmpty(mPassword) && (mTransientPW == null  || ignoreTransient)))) {
-            return R.string.password;
-        }
-        return 0;
-    }
 
     public String getPasswordAuth() {
         if (mTransientPW != null) {
