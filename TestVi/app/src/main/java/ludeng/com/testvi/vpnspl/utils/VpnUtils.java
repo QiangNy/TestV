@@ -26,6 +26,7 @@ public class VpnUtils {
             Log.i("ICABVIEW","native get no data "+num);
         }
 
+
         return VpnProfile.DISPLAYNAME_TAG+filename+VpnProfile.INLINE_TAG + str;
     }
 
