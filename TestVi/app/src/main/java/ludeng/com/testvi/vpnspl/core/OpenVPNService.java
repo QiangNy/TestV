@@ -181,7 +181,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
     private int getIconByConnectionStatus(ConnectionStatus level) {
         switch (level) {
-            case LEVEL_CONNECTED:
+/*            case LEVEL_CONNECTED:
                 return android.R.drawable.ic_media_pause;
             case LEVEL_AUTH_FAILED:
             case LEVEL_NONETWORK:
@@ -194,7 +194,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
                 return android.R.drawable.ic_media_pause;
             case LEVEL_VPNPAUSED:
                 return android.R.drawable.ic_media_pause;
-            case UNKNOWN_LEVEL:
+            case UNKNOWN_LEVEL:*/
             default:
                 return android.R.drawable.ic_media_pause;
 
@@ -415,7 +415,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
 
         } else {
-            HashMap<String, String> env = new HashMap<>();
+             HashMap<String, String> env = new HashMap<>();
             processThread = new OpenVPNThread(this, argv, env, nativeLibraryDirectory);
         }
 

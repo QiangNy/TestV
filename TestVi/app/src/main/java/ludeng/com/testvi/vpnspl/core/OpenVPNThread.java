@@ -115,17 +115,16 @@ public class OpenVPNThread implements Runnable {
 			Log.i(TAG, "Exiting");
 		}
 	}
-	
+	/**
+	 * argv 文件路径数组，文件里存放了数据。
+	 * */
 	private void startOpenVPNThreadArgs(String[] argv, Map<String, String> env) {
 		LinkedList<String> argvlist = new LinkedList<String>();
-
         Collections.addAll(argvlist, argv);
-	
 		ProcessBuilder pb = new ProcessBuilder(argvlist);
 		// Hack O rama
-		
 		String lbpath = genLibraryPath(argv, pb);
-		
+		Log.i("BCABVIEW","lbpath ="+lbpath);
 		pb.environment().put("LD_LIBRARY_PATH", lbpath);
 
 		// Add extra variables
@@ -193,9 +192,15 @@ public class OpenVPNThread implements Runnable {
 
 	private String genLibraryPath(String[] argv, ProcessBuilder pb) {
 		// Hack until I find a good way to get the real library path
+
 		String applibpath = argv[0].replaceFirst("/cache/.*$"  , "/lib");
-		
+		Log.i("BCABVIEW","applibpath ="+applibpath);
+
 		String lbpath = pb.environment().get("LD_LIBRARY_PATH");
+		Log.i("BCABVIEW","lbpath ="+lbpath);
+
+		Log.i("BCABVIEW","mNativeDir ="+mNativeDir);
+
 		if(lbpath==null) 
 			lbpath = applibpath;
 		else
