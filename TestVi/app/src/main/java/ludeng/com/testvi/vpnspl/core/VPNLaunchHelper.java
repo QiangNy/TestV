@@ -136,7 +136,6 @@ public class VPNLaunchHelper {
 		Intent startVPN = startprofile.prepareStartService(context);
 		if(startVPN!=null)
 			context.startService(startVPN);
-
 	}
 
     public static String getConfigFilePath(Context context) {

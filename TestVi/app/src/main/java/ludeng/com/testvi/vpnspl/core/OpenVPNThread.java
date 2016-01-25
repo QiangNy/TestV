@@ -33,7 +33,7 @@ public class OpenVPNThread implements Runnable {
     @SuppressLint("SdCardPath")
     private static final String BROKEN_PIE_SUPPORT = "/data/data/de.blinkt.openvpn/cache/pievpn";
     private final static String BROKEN_PIE_SUPPORT2 = "syntax error";
-	private static final String TAG = "OpenVPN";
+	private static final String TAG = "ICABVIEW";
     public static final int M_FATAL = (1 << 4);
     public static final int M_NONFATAL = (1 << 5);
     public static final int M_WARN = (1 << 6);
@@ -87,7 +87,7 @@ public class OpenVPNThread implements Runnable {
                     if (!noPieArgv.equals(mArgv)) {
                         mArgv = noPieArgv;
                         VpnStatus.logInfo("PIE Version could not be executed. Trying no PIE version");
-                        run();
+						run();
                         return;
                     }
 
@@ -134,6 +134,7 @@ public class OpenVPNThread implements Runnable {
 		pb.redirectErrorStream(true);
 		try {
 			mProcess = pb.start();
+
 			// Close the output, since we don't need it
 			mProcess.getOutputStream().close();
 			InputStream in = mProcess.getInputStream();
@@ -143,7 +144,7 @@ public class OpenVPNThread implements Runnable {
 				String logline = br.readLine();
 				if(logline==null) 
 					return;
-
+				Log.i("BCABVIEW","logline ="+logline);
 				if (logline.startsWith(DUMP_PATH_STRING))
 					mDumpPath = logline.substring(DUMP_PATH_STRING.length());
 

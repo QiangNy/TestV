@@ -7,6 +7,7 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-annotations:21.0.3'
+    compile files('src/main/libs/ICABLib.jar')
 }
 
 android {
@@ -26,12 +27,7 @@ android {
             jniLibs.srcDirs = ['ovpnlibs/libs']
         }
     }
-/*    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }*/
+
 }
 
 

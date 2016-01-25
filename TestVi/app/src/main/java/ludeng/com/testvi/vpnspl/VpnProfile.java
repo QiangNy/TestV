@@ -329,11 +329,11 @@ public class VpnProfile implements Serializable, Cloneable {
                 cfg += "auth-user-pass\n";
             case VpnProfile.TYPE_CERTIFICATES:
                 // Ca
-                cfg += insertFileData("ca", mCaFilename);
+             //   cfg += insertFileData("ca", mCaFilename);
 
                 // Client Cert + Key
-                cfg += insertFileData("key", mClientKeyFilename);
-                cfg += insertFileData("cert", mClientCertFilename);
+            //    cfg += insertFileData("key", mClientKeyFilename);
+            //    cfg += insertFileData("cert", mClientCertFilename);
 
                 break;
             case VpnProfile.TYPE_USERPASS_PKCS12:
