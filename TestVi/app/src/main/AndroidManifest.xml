@@ -17,7 +17,7 @@
     tools:ignore="UnusedAttribute"
         >
         <activity
-            android:name="ludeng.com.testvi.login.LoginActivity"
+            android:name="ludeng.com.testvi.opentest.FirstActivity"
             android:label="@string/app_name"
            >
             <intent-filter>
